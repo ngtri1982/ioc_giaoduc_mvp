@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phòng chuyên môn — IOC Hải Phòng (MVP2)</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><div class="logo">HP</div><div><h1>SỞ GD&ĐT HẢI PHÒNG</h1><p>IOC — Phòng chuyên môn · MVP2 Trực quan hóa · Lọc theo nhóm phụ trách</p></div></div>
+  <nav>
+    <a class="nav-pill" href="index.html">Chọn vai trò</a>
+    <a class="nav-pill" href="lanh-dao-so.html">Lãnh đạo Sở</a>
+    <a class="nav-pill active" href="phong-chuyen-mon.html">Phòng chuyên môn</a>
+    <a class="nav-pill" href="phuong-xa.html">Phường / Xã</a>
+  </nav>
+</div>
+<div class="subbar">
+  <div class="scope">Phạm vi: <strong>Toàn TP</strong> · Lọc theo <strong>phòng phụ trách</strong> · Kỳ <strong>Tháng 9/2025</strong></div>
+  <span class="badge badge-blue">Mỗi phòng chỉ thấy nhóm mình</span>
+</div>
+
+<div class="container">
+<div id="deptTabs" class="tabs"></div>
+
+  <div id="alertStrip" class="alert-strip"></div>
+
+  <div id="groupsGrid" class="groups-grid"></div>
+
+  <!-- Charts that adapt to active tab -->
+  <div id="deptCharts" class="chart-grid" style="margin-bottom:14px"></div>
+
+  <div id="groupDetail"></div>
+</div>
+
+<div id="groupModal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-hd"><h3 id="modalTitle">Chi tiết nhóm</h3><button id="closeModal" class="close">✕</button></div>
+    <div id="modalBody" class="modal-bd"></div>
+  </div>
+</div>
+
+<script src="assets/js/mock.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  window.MVP2.initDept();
+  // Enhance: when tab changes, render relevant charts
+  const tabsEl = document.getElementById("deptTabs");
+  const chartsWrap = document.getElementById("deptCharts");
+  const M = window.IOC_MOCK;
+  function chartCard(title, subtitle, canvasId, note){
+    return `<div class="card"><div class="card-hd"><h3>${title}</h3><p>${subtitle}</p></div><div class="card-bd"><div class="chart-box h-260"><canvas id="${canvasId}"></canvas></div>${note?`<p style="font-size:11.5px;color:var(--muted);margin:8px 0 0">${note}</p>`:""}</div></div>`;
+  }
+  function renderDeptCharts(tabId){
+    if(!chartsWrap || !window.Chart) return;
+    // clear old registry for these ids is handled inside app via putChart
+    let html="";
+    if(tabId==="all"){
+      html = chartCard("Quy mô (Nhóm I)","Tổng HS & huy động","deptChart1","498.732 HS · Huy động 96,4%") + chartCard("Chất lượng (Nhóm III)","Lên lớp / Tốt nghiệp / Chưa đạt","deptChart2","98,7% lên lớp · 2,8% cần hỗ trợ");
+    } else if(tabId==="tochuc"){
+      html = chartCard("Đội ngũ (Nhóm II)","GV/lớp & thiếu GV","deptChart1","1,62 GV/lớp · Thiếu 892") + chartCard("Tiến độ tuyển dụng","% hoàn thành","deptChart2","68,5% · mục tiêu kỳ 75%");
+    } else if(tabId==="caphoc"){
+      html = chartCard("Quy mô (Nhóm I)","Tổng HS & huy động","deptChart1","") + chartCard("Chất lượng (Nhóm III)","Lên lớp / Tốt nghiệp","deptChart2","");
+    } else if(tabId==="khtc"){
+      html = chartCard("Tài chính & CSVC (Nhóm VIII)","Giải ngân & tiến độ DA","deptChart1","62,4% giải ngân · 74,6% DA") + chartCard("An toàn trường học","Vụ việc chưa xử lý","deptChart2","3 vụ đang xử lý");
+    } else if(tabId==="cntt"){
+      html = chartCard("Dữ liệu & CĐS (Nhóm VI)","Dữ liệu đạt / Học bạ số / Nền tảng","deptChart1","") + chartCard("An toàn số (Nhóm VII)","Sự cố & KDTM","deptChart2","");
+    } else if(tabId==="vanphong"){
+      html = chartCard("Chỉ đạo, điều hành (Nhóm IV)","Nhiệm vụ đúng hạn","deptChart1","84,2% đúng hạn · 14 NV quá hạn") + chartCard("TTHC (Nhóm V)","Đúng hạn / Trực tuyến / Cắt giảm","deptChart2","");
+    }
+    chartsWrap.innerHTML = html;
+    setTimeout(()=>{
+      const labels=["T11/24","T12/24","T01/25","T02/25","T03/25","T04/25","T05/25","T09/25"];
+      const mk = (id, cfg)=> {
+        const el=document.getElementById(id);
+        if(!el || !window.Chart) return;
+        Chart.defaults.font.family="Inter, system-ui, sans-serif";
+        new Chart(el, cfg);
+      };
+      // simple line datasets per tab
+      if(tabId==="all" || tabId==="caphoc"){
+        mk("deptChart1",{type:"line",data:{labels, datasets:[{label:"Tổng HS",data:M.INDICATORS[0].trend,borderColor:"#1a6ab5",backgroundColor:"#1a6ab514",fill:true,tension:.38,pointRadius:2},{label:"Huy động %",data:M.INDICATORS[1].trend,borderColor:"#0e8a7a",fill:false,tension:.38,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{x:{grid:{display:false}},y:{grid:{color:"#f0f2f6"}}}}});
+        mk("deptChart2",{type:"line",data:{labels, datasets:[{label:"Lên lớp %",data:M.INDICATORS[6].trend,borderColor:"#0e7a3a",backgroundColor:"#0e7a3a14",fill:true,tension:.38,pointRadius:2},{label:"Tốt nghiệp %",data:M.INDICATORS[7].trend,borderColor:"#1a6ab5",fill:false,tension:.38,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{x:{grid:{display:false}},y:{min:90,max:100,grid:{color:"#f0f2f6"}},}});
+      } else if(tabId==="tochuc"){
+        mk("deptChart1",{type:"bar",data:{labels, datasets:[{label:"Thiếu GV",data:M.INDICATORS[4].trend.map(v=>Math.abs(v)),backgroundColor:"#c58a00cc",borderRadius:6},{type:"line",label:"GV/lớp",data:M.INDICATORS[3].trend,borderColor:"#6a3fb5",fill:false,tension:.38,pointRadius:2,yAxisID:"y1"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{grid:{color:"#f0f2f6"}},y1:{position:"right",grid:{display:false}},x:{grid:{display:false}}}}});
+        mk("deptChart2",{type:"line",data:{labels, datasets:[{label:"Tuyển dụng %",data:M.INDICATORS[5].trend,borderColor:"#0e7a3a",backgroundColor:"#0e7a3a14",fill:true,tension:.38,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,grid:{color:"#f0f2f6"}},x:{grid:{display:false}}}}});
+      } else if(tabId==="khtc"){
+        mk("deptChart1",{type:"bar",data:{labels, datasets:[{label:"Giải ngân %",data:M.INDICATORS[21].trend,backgroundColor:"#c58a00cc",borderRadius:6},{label:"Tiến độ DA %",data:M.INDICATORS[22].trend,backgroundColor:"#0e7a3acc",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{min:0,max:100,grid:{color:"#f0f2f6"}},x:{grid:{display:false}}}}});
+        mk("deptChart2",{type:"doughnut",data:{labels:["Đã XL","Chưa XL"],datasets:[{data:[8,3],backgroundColor:["#0e7a3a","#d64545"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom"}}}});
+      } else if(tabId==="cntt"){
+        mk("deptChart1",{type:"bar",data:{labels, datasets:[{label:"Dữ liệu đạt %",data:M.INDICATORS[15].trend,backgroundColor:"#0e8a7a",borderRadius:6},{label:"Học bạ số %",data:M.INDICATORS[16].trend,backgroundColor:"#1a6ab5",borderRadius:6},{label:"Nền tảng %",data:M.INDICATORS[17].trend,backgroundColor:"#6a3fb5",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{min:0,max:100,grid:{color:"#f0f2f6"}},x:{grid:{display:false}}}}});
+        mk("deptChart2",{type:"doughnut",data:{labels:["Đúng hạn","Quá hạn"],datasets:[{data:[5,2],backgroundColor:["#0e7a3a","#c58a00"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom"},title:{display:true,text:"7 sự cố ATTT"}}}});
+      } else if(tabId==="vanphong"){
+        mk("deptChart1",{type:"line",data:{labels, datasets:[{label:"NV đúng hạn %",data:M.INDICATORS[9].trend,borderColor:"#c58a00",backgroundColor:"#c58a0014",fill:true,tension:.38,pointRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:70,max:100,grid:{color:"#f0f2f6"}},x:{grid:{display:false}}}}});
+        mk("deptChart2",{type:"bar",data:{labels, datasets:[{label:"TTHC đúng hạn %",data:M.INDICATORS[12].trend,backgroundColor:"#0e8a7acc",borderRadius:6},{label:"Trực tuyến %",data:M.INDICATORS[13].trend,backgroundColor:"#1a6ab5cc",borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{y:{min:0,max:100,grid:{color:"#f0f2f6"}},x:{grid:{display:false}}}}});
+      }
+    }, 80);
+  }
+  // hook tab clicks
+  setTimeout(()=>{
+    tabsEl?.querySelectorAll(".tab").forEach(b=> b.addEventListener("click", ()=> setTimeout(()=>renderDeptCharts(b.dataset.tab), 50)));
+    const active = tabsEl?.querySelector(".tab.active")?.dataset.tab || "all";
+    renderDeptCharts(active);
+  }, 250);
+});
+</script>
+</body>
+</html>

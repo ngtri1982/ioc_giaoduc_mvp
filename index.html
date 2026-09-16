@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IOC Giáo dục Hải Phòng — MVP2</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><div class="logo">HP</div><div><h1>SỞ GD&ĐT HẢI PHÒNG</h1><p>IOC Giáo dục — MVP2 · Trực quan hóa dữ liệu · 24 chỉ số / 8 nhóm</p></div></div>
+  <nav>
+    <a class="nav-pill active" href="index.html">Chọn vai trò</a>
+    <a class="nav-pill" href="lanh-dao-so.html">Lãnh đạo Sở</a>
+    <a class="nav-pill" href="phong-chuyen-mon.html">Phòng chuyên môn</a>
+    <a class="nav-pill" href="phuong-xa.html">Phường / Xã</a>
+  </nav>
+</div>
+
+<div class="landing">
+  <div class="hero">
+    <h1>MVP2 — Trực quan hóa dữ liệu điều hành</h1>
+    <p>Trực quan hóa 24 chỉ số / 8 nhóm (I–VIII) bằng biểu đồ xu hướng, so sánh và donut. Dữ liệu giả lập bao phủ đủ tình huống Tốt / Cảnh báo / Nguy cơ.</p>
+    <div class="legend" style="margin-top:10px;color:rgba(255,255,255,.9)">
+      <span><i style="background:#0e7a3a"></i> Tốt</span><span><i style="background:#c58a00"></i> Cảnh báo</span><span><i style="background:#d64545"></i> Nguy cơ</span>
+      <span style="opacity:.85">· Kỳ: tháng 9/2025 · So sánh 8 kỳ gần nhất</span>
+    </div>
+  </div>
+
+  <div class="role-grid">
+    <div class="role-card">
+      <div style="width:44px;height:44px;border-radius:12px;background:#0b1e3a;color:#fff;display:grid;place-items:center;font-size:22px">📊</div>
+      <h3>A. Lãnh đạo Sở — Dashboard biểu đồ</h3>
+      <p>KPI sparkline + 8 ô nhóm + 7 biểu đồ (line, bar, doughnut) cho 8 nhóm — quét một màn hình là nắm toàn ngành.</p>
+      <ul>
+        <li>KPI strip 4 thẻ có sparkline 8 kỳ</li>
+        <li>Biểu đồ: Quy mô, Đội ngũ, Chất lượng, TTHC, CĐS, ATTT, Tài chính</li>
+      </ul>
+      <a class="btn btn-primary" href="lanh-dao-so.html">Mở Lãnh đạo Sở (MVP2) →</a>
+    </div>
+    <div class="role-card">
+      <div style="width:44px;height:44px;border-radius:12px;background:#6a3fb5;color:#fff;display:grid;place-items:center;font-size:22px">👥</div>
+      <h3>B. Phòng chuyên môn — Lọc theo nhóm</h3>
+      <p>Tabs theo phòng phụ trách — chỉ thấy nhóm mình, biểu đồ và cảnh báo lọc theo.</p>
+      <ul>
+        <li>Tabs: Tổ chức-CB, GDPT, KHTC, CĐS, Văn phòng</li>
+        <li>Lưới nhóm + cảnh báo lọc đồng bộ</li>
+      </ul>
+      <a class="btn btn-primary" href="phong-chuyen-mon.html">Mở Phòng chuyên môn →</a>
+    </div>
+    <div class="role-card">
+      <div style="width:44px;height:44px;border-radius:12px;background:#0e7a3a;color:#fff;display:grid;place-items:center;font-size:22px">📍</div>
+      <h3>C. Phường/Xã — So sánh địa bàn</h3>
+      <p>Chọn phường/xã — KPI địa bàn + biểu đồ so sánh GV/lớp giữa 10 địa bàn.</p>
+      <ul>
+        <li>Bộ chọn 10 phường/xã · chỉ MN+TH+THCS</li>
+        <li>Bar ngang GV/lớp — thấy ngay nơi thiếu nặng</li>
+      </ul>
+      <a class="btn btn-primary" href="phuong-xa.html">Mở Phường/Xã →</a>
+    </div>
+  </div>
+<div class="footer">MVP2 · IOC Giáo dục Hải Phòng · 09/2025 · Chart.js · Dữ liệu giả lập</div>
+</div>
+</body>
+</html>
