@@ -3,63 +3,130 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IOC Giáo dục Hải Phòng — MVP2</title>
+<title>Bảng điều hành Lãnh đạo Sở — IOC Giáo dục Hải Phòng</title>
 <link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="topbar">
-  <div class="brand"><div class="logo">HP</div><div><h1>SỞ GD&ĐT HẢI PHÒNG</h1><p>IOC Giáo dục — MVP2 · Trực quan hóa dữ liệu · 24 chỉ số / 8 nhóm</p></div></div>
-  <nav>
-    <a class="nav-pill active" href="index.html">Chọn vai trò</a>
-    <a class="nav-pill" href="lanh-dao-so.html">Lãnh đạo Sở</a>
-    <a class="nav-pill" href="phong-chuyen-mon.html">Phòng chuyên môn</a>
-    <a class="nav-pill" href="phuong-xa.html">Phường / Xã</a>
-  </nav>
+  <div class="brand">
+    <div class="logo">HP</div>
+    <div><h1>SỞ GIÁO DỤC VÀ ĐÀO TẠO HẢI PHÒNG</h1><p>Trung tâm điều hành thông minh (IOC) · Bảng điều hành dành cho Lãnh đạo Sở</p></div>
+  </div>
+  <div class="period">Kỳ báo cáo<b>Tháng 9/2025</b></div>
+</div>
+<div class="subbar">
+  <div class="scope">Phạm vi: <strong>Toàn thành phố</strong> · Năm học <strong>2025–2026</strong> · So sánh 8 kỳ gần nhất (T11/2024 → T09/2025)</div>
+  <span style="margin-left:auto" class="legend"><i style="background:#0e7a3a"></i> Tốt <i style="background:#c58a00"></i> Cảnh báo <i style="background:#d64545"></i> Nguy cơ</span>
 </div>
 
-<div class="landing">
-  <div class="hero">
-    <h1>MVP2 — Trực quan hóa dữ liệu điều hành</h1>
-    <p>Trực quan hóa 24 chỉ số / 8 nhóm (I–VIII) bằng biểu đồ xu hướng, so sánh và donut. Dữ liệu giả lập bao phủ đủ tình huống Tốt / Cảnh báo / Nguy cơ.</p>
-    <div class="legend" style="margin-top:10px;color:rgba(255,255,255,.9)">
-      <span><i style="background:#0e7a3a"></i> Tốt</span><span><i style="background:#c58a00"></i> Cảnh báo</span><span><i style="background:#d64545"></i> Nguy cơ</span>
-      <span style="opacity:.85">· Kỳ: tháng 9/2025 · So sánh 8 kỳ gần nhất</span>
+<div class="container">
+
+  <!-- Chỉ số điều hành nổi bật -->
+  <div id="kpiStrip" class="kpi-strip"></div>
+
+  <!-- Cảnh báo điều hành -->
+  <div id="alertStrip" class="alert-strip"></div>
+
+  <!-- Tổng hợp & cảnh báo nhiệm vụ -->
+  <div class="section-title"><h2>Tổng hợp nhiệm vụ chỉ đạo, điều hành</h2><p>Theo dõi tiến độ thực hiện nhiệm vụ và chế độ báo cáo định kỳ của các đơn vị</p></div>
+  <div id="taskSummary"></div>
+
+  <!-- 9 nhóm chỉ số -->
+  <div class="section-title"><h2>9 nhóm chỉ số điều hành ngành (27 chỉ số)</h2><p>Bấm vào từng nhóm để xem chi tiết chỉ số, xu hướng và thuyết minh</p></div>
+  <div id="groupsGrid" class="groups-grid"></div>
+
+  <!-- Biểu đồ trực quan hóa -->
+  <div class="section-title"><h2>Biểu đồ trực quan hóa dữ liệu theo nhóm</h2><p>Xu hướng 8 kỳ gần nhất theo từng lĩnh vực điều hành</p></div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm I — Quy mô, mạng lưới & người học</h3><p>Tổng học sinh & tỷ lệ huy động</p></div>
+      <div class="card-bd"><div class="chart-box h-260"><canvas id="chartQuyMo"></canvas></div>
+        <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">498.732 học sinh · 1.892 trường · 14.260 lớp · Tuyển sinh đạt 96,4% (vượt cùng kỳ +2,3 điểm %).</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm II — Đội ngũ</h3><p>GV/lớp & tình trạng thiếu GV</p></div>
+      <div class="card-bd"><div class="chart-box h-260"><canvas id="chartDoiNgu"></canvas></div>
+        <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">1,62 GV/lớp · Thiếu 892 người so với định biên · Tuyển dụng đạt 68,5% kế hoạch năm.</p>
+      </div>
     </div>
   </div>
 
-  <div class="role-grid">
-    <div class="role-card">
-      <div style="width:44px;height:44px;border-radius:12px;background:#0b1e3a;color:#fff;display:grid;place-items:center;font-size:22px">📊</div>
-      <h3>A. Lãnh đạo Sở — Dashboard biểu đồ</h3>
-      <p>KPI sparkline + 8 ô nhóm + 7 biểu đồ (line, bar, doughnut) cho 8 nhóm — quét một màn hình là nắm toàn ngành.</p>
-      <ul>
-        <li>KPI strip 4 thẻ có sparkline 8 kỳ</li>
-        <li>Biểu đồ: Quy mô, Đội ngũ, Chất lượng, TTHC, CĐS, ATTT, Tài chính</li>
-      </ul>
-      <a class="btn btn-primary" href="lanh-dao-so.html">Mở Lãnh đạo Sở (MVP2) →</a>
-    </div>
-    <div class="role-card">
-      <div style="width:44px;height:44px;border-radius:12px;background:#6a3fb5;color:#fff;display:grid;place-items:center;font-size:22px">👥</div>
-      <h3>B. Phòng chuyên môn — Lọc theo nhóm</h3>
-      <p>Tabs theo phòng phụ trách — chỉ thấy nhóm mình, biểu đồ và cảnh báo lọc theo.</p>
-      <ul>
-        <li>Tabs: Tổ chức-CB, GDPT, KHTC, CĐS, Văn phòng</li>
-        <li>Lưới nhóm + cảnh báo lọc đồng bộ</li>
-      </ul>
-      <a class="btn btn-primary" href="phong-chuyen-mon.html">Mở Phòng chuyên môn →</a>
-    </div>
-    <div class="role-card">
-      <div style="width:44px;height:44px;border-radius:12px;background:#0e7a3a;color:#fff;display:grid;place-items:center;font-size:22px">📍</div>
-      <h3>C. Phường/Xã — So sánh địa bàn</h3>
-      <p>Chọn phường/xã — KPI địa bàn + biểu đồ so sánh GV/lớp giữa 10 địa bàn.</p>
-      <ul>
-        <li>Bộ chọn 10 phường/xã · chỉ MN+TH+THCS</li>
-        <li>Bar ngang GV/lớp — thấy ngay nơi thiếu nặng</li>
-      </ul>
-      <a class="btn btn-primary" href="phuong-xa.html">Mở Phường/Xã →</a>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-hd"><h3>Nhóm III — Chất lượng giáo dục</h3><p>Tỷ lệ lên lớp / tốt nghiệp / chưa đạt yêu cầu</p></div>
+    <div class="card-bd"><div class="chart-box h-260"><canvas id="chartChatLuong"></canvas></div>
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">98,7% lên lớp · 97,9% tốt nghiệp · 2,8% cần hỗ trợ (giảm so với 3,4% cùng kỳ).</p>
     </div>
   </div>
-<div class="footer">MVP2 · IOC Giáo dục Hải Phòng · 09/2025 · Chart.js · Dữ liệu giả lập</div>
+
+  <div class="chart-grid equal">
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm V — TTHC & phục vụ người dân</h3><p>Đúng hạn / Trực tuyến / Cắt giảm hồ sơ</p></div>
+      <div class="card-bd"><div class="chart-box h-260"><canvas id="chartTTHC"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm VI — Dữ liệu & chuyển đổi số</h3><p>Dữ liệu đạt / Học bạ số / Nền tảng dùng chung</p></div>
+      <div class="card-bd"><div class="chart-box h-260"><canvas id="chartCDS"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-hd"><h3>Nhóm VII — An toàn thông tin & thanh toán số</h3><p>Sự cố ATTT & thanh toán không dùng tiền mặt</p></div>
+    <div class="card-bd">
+      <div class="chart-grid equal" style="margin-bottom:0">
+        <div class="chart-box h-220"><canvas id="chartATTT"></canvas></div>
+        <div class="chart-box h-220"><canvas id="chartKDTM"></canvas></div>
+      </div>
+      <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">7 sự cố an toàn thông tin (5 xử lý đúng hạn) · Thanh toán không tiền mặt đạt 58,3% · 71% cơ sở giáo dục đạt yêu cầu ATTT.</p>
+    </div>
+  </div>
+
+  <div class="chart-grid equal">
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm VIII — Tài chính, ngân sách</h3><p>Giải ngân / Thực hiện dự toán NSNN / Nguồn thu sự nghiệp</p></div>
+      <div class="card-bd">
+        <div class="chart-box h-220"><canvas id="chartTaiChinhNS"></canvas></div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px">
+          <div class="stat-tile"><div class="st-l">Dự toán NSNN giao</div><div class="st-v">3.850 tỷ</div><div class="st-s">42 đơn vị dự toán trực thuộc</div></div>
+          <div class="stat-tile"><div class="st-l">Đã quyết toán</div><div class="st-v">2.890 tỷ</div><div class="st-s">Đạt 75,1% dự toán giao</div></div>
+          <div class="stat-tile"><div class="st-l">Nguồn thu sự nghiệp</div><div class="st-v">285 tỷ</div><div class="st-s">Đã quyết toán 198 tỷ (69,5%)</div></div>
+          <div class="stat-tile"><div class="st-l">Chi đầu tư trong dự toán</div><div class="st-v">520 tỷ</div><div class="st-s">Chi thường xuyên 3.120 tỷ</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><h3>Nhóm IX — Đầu tư, CSVC & an toàn trường học</h3><p>Tiến độ dự án / Đầu tư sửa chữa / Vụ việc an toàn</p></div>
+      <div class="card-bd">
+        <div class="chart-box h-220"><canvas id="chartDauTuCSVC"></canvas></div>
+        <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="stat-tile"><div class="st-l">Tổng mức đầu tư</div><div class="st-v">612 tỷ</div><div class="st-s">34 dự án xây dựng</div></div>
+            <div class="stat-tile"><div class="st-l">Kinh phí sửa chữa</div><div class="st-v">87 tỷ</div><div class="st-s">58/75 cơ sở (77,3% KH năm)</div></div>
+          </div>
+          <div class="chart-box h-220"><canvas id="chartAnToanTH"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bảng chi tiết nhóm được chọn -->
+  <div class="section-title"><h2>Chi tiết chỉ số theo nhóm</h2><p>Bấm chọn 1 nhóm ở trên để xem bảng chi tiết bên dưới</p></div>
+  <div id="groupDetail"></div>
+
+  <div class="footer">IOC Giáo dục Hải Phòng · Bảng điều hành Lãnh đạo Sở · Kỳ báo cáo Tháng 9/2025 · Dữ liệu mô phỏng cho mục đích minh họa MVP2</div>
 </div>
+
+<div id="groupModal" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-hd"><h3 id="modalTitle">Chi tiết nhóm</h3><button id="closeModal" class="close">✕</button></div>
+    <div id="modalBody" class="modal-bd"></div>
+  </div>
+</div>
+
+<script src="assets/js/mock.js"></script>
+<script src="assets/js/app.js"></script>
+<script>document.addEventListener("DOMContentLoaded", ()=> window.MVP2.init());</script>
 </body>
 </html>
